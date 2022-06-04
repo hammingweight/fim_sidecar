@@ -1,0 +1,6 @@
+pid=$(ps aux | grep Simple | grep -v grep | awk '{print $1}')
+echo $pid
+if ! grep ^Hello /proc/$pid/root/www/index.html; then
+    kill -9 $pid
+    exit 1
+fi
