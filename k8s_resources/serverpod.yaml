@@ -15,10 +15,12 @@ spec:
           protocol: TCP
     - image: fim:1.0
       name: fim
+      securityContext:
+        privileged: true
       livenessProbe:
         exec:
           command:
           - /bin/ash
           - /healthz
-          - /www/index.html
+          - /home/testuser/index.html
           - 746308829575e17c3331bbcb00c0898b
