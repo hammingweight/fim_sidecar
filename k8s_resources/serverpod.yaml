@@ -15,8 +15,6 @@ spec:
           protocol: TCP
     - image: fim:1.0
       name: fim
-      securityContext:
-        privileged: true
       livenessProbe:
         exec:
           command:
