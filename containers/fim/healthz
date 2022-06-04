@@ -1,6 +1,38 @@
-pid=$(ps aux | grep Simple | grep -v grep | awk '{print $1}')
-echo $pid
-if ! grep ^Hello /proc/$pid/root/www/index.html; then
-    kill -9 $pid
-    exit 1
+get_pid_for_proc_in_monitored_container() {
+    magic_file_name=$(cat /magic/magic_constant)
+    for p in $(ps -A -o pid | grep -v PID)
+    do
+        if ls /proc/$p/root >/dev/null 2>&1
+        then
+           if [ ! -f /proc/$p/root/magic/$magic_file_name ]
+           then
+               echo $p
+           fi
+        fi
+    done
+}
+
+create_magic_file_name() {
+    magic_file_name=$(cat /proc/sys/kernel/random/uuid)
+    mkdir -p /magic
+    echo $magic_file_name > /magic/magic_constant
+    touch /magic/$magic_file_name
+}
+
+if [ ! -e /magic/magic_constant ]
+then
+    create_magic_file_name
 fi
+
+
+FILE_TO_MONITOR=$1
+MD5SUM=$2
+pids=$(get_pid_for_proc_in_monitored_container $magic_constant)
+for p in $pids
+do
+    if [ "$(md5sum /proc/$p/root/$FILE_TO_MONITOR | awk '{print $1}')" != "$MD5SUM" ]
+    then
+        echo "Killing process $p..."
+        kill -9 $p
+    fi
+done

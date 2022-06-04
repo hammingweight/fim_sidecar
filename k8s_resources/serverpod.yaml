@@ -20,3 +20,5 @@ spec:
           command:
           - /bin/ash
           - /healthz
+          - /www/index.html
+          - 746308829575e17c3331bbcb00c0898b
