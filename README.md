@@ -68,7 +68,7 @@ Hello, world!
 Now, set a watch on the pods
 
 ```
-~$ kubectl get pods -w
+$ kubectl get pods -w
 NAME         READY   STATUS    RESTARTS   AGE
 httpserver   2/2     Running   0          5m26s
 ```
@@ -97,5 +97,3 @@ Issuing a `GET` should return the "Hello, world!" message again since the contai
 $ curl http://10.111.46.161
 Hello, world!
 ```
-
-
