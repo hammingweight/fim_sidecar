@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: httpserver
+  name: helloservice
   labels:
-    app: httpserver
+    app: helloservice
 spec:
   ports:
   - port: 80
     protocol: TCP
     targetPort: 8000
   selector:
-    app: httpserver
+    app: helloserver
   type: LoadBalancer

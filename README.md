@@ -35,7 +35,7 @@ You'll need locally installed versions of
 To build and run the application, execute
 
 ```
-$ ./build/build.sh
+$ ./build.sh
 ```
 
 The build script starts up minikube, builds the container images for the application and sidecar, creates a pod with the two containers and creates a Kubernetes
@@ -44,8 +44,8 @@ the pod contains two containers.
 
 ```
 $ kubectl get pods
-NAME         READY   STATUS    RESTARTS   AGE
-httpserver   2/2     Running   0          10s
+NAME          READY   STATUS    RESTARTS   AGE
+helloserver   2/2     Running   0          10s
 ```
 
 Create a tunnel to access the minikube cluster
@@ -54,13 +54,13 @@ Create a tunnel to access the minikube cluster
 $ minikube tunnel
 ```
 
-You should then be able to access the `httpservice` via its external IP address
+You should then be able to access the `helloservice` via its external IP address
 
 ```
 $ kubectl get services
-NAME         TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)        AGE
-httpserver   LoadBalancer   10.111.46.161   10.111.46.161   80:32469/TCP   2m30s
-kubernetes   ClusterIP      10.96.0.1       <none>          443/TCP        3m58s
+NAME           TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)        AGE
+helloservice   LoadBalancer   10.111.46.161   10.111.46.161   80:32469/TCP   2m30s
+kubernetes     ClusterIP      10.96.0.1       <none>          443/TCP        3m58s
 $ curl http://10.111.46.161
 Hello, world!
 ```
@@ -69,15 +69,15 @@ Now, set a watch on the pods
 
 ```
 $ kubectl get pods -w
-NAME         READY   STATUS    RESTARTS   AGE
-httpserver   2/2     Running   0          5m26s
+NAME          READY   STATUS    RESTARTS   AGE
+helloserver   2/2     Running   0          5m26s
 ```
 
-Next, in another terminal, modify the `index.html` page that the `httpserver` application container delivers
+Next, in another terminal, modify the `index.html` page in the `helloserver` application container
 
 ```
-$ kubectl exec -it httpserver -c httpserver -- bash
-testuser@httpserver:~$ echo hacked > index.html && exit
+$ kubectl exec -it helloserver -c helloserver -- bash
+hellouser@helloserver:~$ echo hacked > index.html && exit
 exit
 ```
 
@@ -85,10 +85,10 @@ The terminal showing the state of the pod should show the pod go into error and 
 
 ```
 $ kubectl get pods -w
-NAME         READY   STATUS    RESTARTS   AGE
-httpserver   2/2     Running   0          5m26s
-httpserver   1/2     Error     0          6m21s
-httpserver   2/2     Running   1 (2s ago)   6m22s
+NAME          READY   STATUS    RESTARTS   AGE
+helloserver   2/2     Running   0          5m26s
+helloserver   1/2     Error     0          6m21s
+helloserver   2/2     Running   1 (2s ago)   6m22s
 ```
 
 Issuing a `GET` should return the "Hello, world!" message again since the container was restarted
