@@ -25,7 +25,7 @@ The code creates a Kubernetes pod that delivers a single HTML page with a "Hello
 checks whether the contents of the HTML page has been edited and, if so, kills the processes running in the first container and relies on the Kubernetes
 controlplane to start a new instance of the container. The pod is exposed to the outside world by a LoadBalancer service.
 
-### Prequisites
+### Prerequisites
 You'll need locally installed versions of
  * Docker
  * Minikube
