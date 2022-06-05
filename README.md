@@ -10,14 +10,14 @@ There are many mechanisms to increase the security of applications deployed in c
  * seccomp profiles to provide fine-grained access to kernel calls
  * cgroups to limit the blast radius of a denial of service attack on a single container
 
-Despite all the security primitives available to secure containers, it can be advisable to run file intrusion monitoring (FIM) software such as
+Despite all the security primitives, it may still be advisable to run file intrusion monitoring (FIM) software such as
 [AIDE]( https://aide.github.io/). However, an attacker who compromises a container might also be able to disable the FIM. This repository shows one way in which a
 sidecar can monitor the file integrity of another container.
 
 The containers in a pod share the same network namespace (so they share IP addresses and network connections) and UTS namespace (so they have the same hostname).
 By default, pods do not share the same process namespace. The pod's containers obviously have distinct file systems. However, if two containers share the same process
 namespace it is possible to allow them access to each other's file systems via the `procfs` system as noted on the 
-[Kubernetes website](https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/). This demo shows a simple example of FIM using a sidecae
+[Kubernetes website](https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/). This demo shows a simple example of FIM using a sidecar
 that shares a process namespace with another container.
 
 ## The Example
