@@ -21,6 +21,7 @@ namespace it is possible to allow them access to each other's file systems via t
 using a sidecar container that shares a process namespace with an application container. The sidecar runs with greater privileges than the application container;
 the sidecar can access files in the application container but the application cannot read files in the sidecar container. 
 
+
 ## The Example Application
 The code creates a Kubernetes pod that delivers a single HTML page with a "Hello, world!" message. The pod contains a second (sidecar) container that 
 checks whether the contents of the HTML page has been edited and, if so, kills the processes running in the first container and relies on the Kubernetes
@@ -31,7 +32,7 @@ You'll need locally installed versions of
  * Docker
  * Minikube
 
-### Building and Running the Application
+### Building and running the application
 To build and run the application, execute
 
 ```
@@ -149,6 +150,24 @@ script. This is a very simple script that takes a file name and an MD5 hash valu
 If the hashes don't match, the script (with a certain amount of hackery) determines all the processes running in the monitored container and issues a
 `SIGKILL` to all the processes. Killing all the processes in that way crashes the container and Kubernetes restarts a new instance of the container.
 
-Two observations are in order:
-* The `healthz` integrity test is minimalist; we should be checking entire directories not just a single file. Running `AIDE` in the `fim` container would be better than performing a simple hash.
+Two observations:
+* The `healthz` integrity test is minimalist; we should be checking entire directories not just a single file. Running `AIDE` in the `fim` container would be better than performing a simple hash of only one file.
 * While we invoke the integrity test as a liveness check, we could run our integrity testing in a loop in the `fim` container's main process.
+
+
+## Getting this Code Production-ready
+There are at least three improvements that should be made if you want to run file integrity monitoring from a sidecar:
+* Use proper intrusion detection software like AIDE rather than hacking some MD5 integrity checking together
+* Run the `fim` container with the minimum privileges needed
+* Provide an admission controller to create the pod definitions for the monitored container. See the next subsection.
+
+### Writing a FIM admission controller
+The [`hello_server_pod`](./k8s_resources/hello_server_pod.yaml) file includes a definition for the `fim` container including arguments that must be passed
+to the pod's liveness check. End users should only need to specify their own container in the pod
+definition and use metadata annotations to identify files and directories that should be monitored as part of intrusion detection. A FIM admission controller would
+parse the pod's annotations and add an appropriate FIM container specification to the the pod manifest.
+
+
+## Looking at the Code in more depth
+This is not production-grade code but if you're bored, there are more implementation details in the README files in the [containers](./containers) and 
+[k8s_resources](./k8s_resources) directories.
