@@ -73,7 +73,7 @@ NAME          READY   STATUS    RESTARTS   AGE
 helloserver   2/2     Running   0          5m26s
 ```
 
-Next, in another terminal, modify the `index.html` page in the `helloserver` application container
+Next, in another terminal, modify the `index.html` page in the `helloserver` application container (which is in the `helloserver` pod)
 
 ```
 $ kubectl exec -it helloserver -c helloserver -- bash
@@ -81,7 +81,7 @@ hellouser@helloserver:~$ echo hacked > index.html && exit
 exit
 ```
 
-The terminal showing the state of the pod should show the pod go into error and then get restarted
+The terminal showing the state of the pod should show the pod go into error and then get restarted.
 
 ```
 $ kubectl get pods -w
@@ -91,9 +91,64 @@ helloserver   1/2     Error     0          6m21s
 helloserver   2/2     Running   1 (2s ago)   6m22s
 ```
 
-Issuing a `GET` should return the "Hello, world!" message again since the container was restarted
+Issuing a `GET` should return the "Hello, world!" message again since the container was restarted.
 
 ```
 $ curl http://10.111.46.161
 Hello, world!
 ```
+
+## How does this work?
+### Accessing files via `procfs`
+To see how this works, get an `ash` shell to the `fim` container in the `helloserver` pod and list the processes.
+
+```
+$ kubectl exec -it helloserver -c fim -- ash
+/ # ps aux
+PID   USER     TIME  COMMAND
+    1 65535     0:00 /pause
+    7 1000      0:00 python -m SimpleHTTPServer
+   13 root      0:00 sleep infinity
+  531 root      0:00 ash
+  563 root      0:00 ps aux
+```
+
+The `ash` process, for example, is running within the `fim` container but the `SimpleHTTPServer` with PID 7 is running in the `helloserver` container.
+Since the `fim` container is running with elevated privileges, we can access files on the `helloserver` container via symlinks in the `procfs` filesystem.
+Since the PID is 7, we can access the `index.html` file by running
+
+```
+/ # cat /proc/7/root/home/hellouser/index.html
+Hello, world!
+```
+
+We can try a similar experiment in the `helloserver` container by opening a `bash` shell
+
+```
+$ kubectl exec -it helloserver -c helloserver -- bash
+hellouser@helloserver:~$ ps aux
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+65535          1  0.0  0.0    972     4 ?        Ss   10:00   0:00 /pause
+hellous+       7  0.0  0.1  19168 13512 ?        Ss   10:00   0:00 python -m SimpleHTTPServer
+root          13  0.0  0.0   1316     4 ?        Ss   10:00   0:00 sleep infinity
+hellous+    3138  1.0  0.0   5756  3704 pts/0    Ss   10:20   0:00 bash
+hellous+    3146  0.0  0.0   9396  3008 pts/0    R+   10:20   0:00 ps aux
+```
+
+Process 13 is running in the `fim` container but, this time, we cannot access the files since the `helloserver` container is not running with elevated
+privileges
+
+```
+hellouser@helloserver:~$ ls /proc/13/root
+ls: cannot access '/proc/13/root': Permission denied
+```
+
+### Checking file integrity as a liveness check
+By default, Kubernetes polls containers for their liveness every 5 seconds. The `fim` container is configured to invoke the [`healthz`](./containers/fim/healthz)
+script. This is a very simple script that takes a file name and an MD5 hash value as arguments and checks that the file contents has the expected hash.
+If the hashes don't match, the script (with a certain amount of hackery) determines all the processes running in the monitored container and issues a
+`SIGKILL` to all the processes. Killing all the processes in that way crashes the container and Kubernetes restarts a new instance of the container.
+
+Two observations are in order:
+* The `healthz` integrity test is minimalist; we should be checking entire directories not just a single file. Running `AIDE` in the `fim` container would be better than performing a simple hash.
+* While we invoke the integrity test as a liveness check, we could run our integrity testing in a loop in the `fim` container's main process.
