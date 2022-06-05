@@ -16,11 +16,12 @@ sidecar can monitor the file integrity of another container.
 
 The containers in a pod share the same network namespace (so they share IP addresses and network connections) and UTS namespace (so they have the same hostname).
 By default, pods do not share the same process namespace. The pod's containers obviously have distinct file systems. However, if two containers share the same process
-namespace it is possible to allow them access to each other's file systems via the `procfs` system as noted on the 
-[Kubernetes website](https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/). This demo shows a simple example of FIM using a sidecar
-that shares a process namespace with another container.
+namespace it is possible to allow them access to each other's file systems via the `procfs` system as noted in the 
+[Kubernetes documentation](https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/). This demo shows an artificially simple example of FIM
+using a sidecar container that shares a process namespace with an application container. The sidecar runs with greater privileges than the application container;
+the sidecar can access files in the application container but the application cannot read files in the sidecar container. 
 
-## The Example
+## The Example Application
 The code creates a Kubernetes pod that delivers a single HTML page with a "Hello, world!" message. The pod contains a second (sidecar) container that 
 checks whether the contents of the HTML page has been edited and, if so, kills the processes running in the first container and relies on the Kubernetes
 controlplane to start a new instance of the container. The pod is exposed to the outside world by a LoadBalancer service.
@@ -30,3 +31,13 @@ You'll need locally installed versions of
  * Docker
  * Minikube
 
+### Building and Running the Application
+To build and run the application, execute
+
+```
+$ ./build/build.sh
+```
+
+The build script starts up minikube, builds the container images for the application and sidecar, creates a pod with the two containers and creates a Kubernetes
+load balancer service to make the application accessible. If the build script completes successfully, you should be able to see the pod as running and that
+the pod contains two containers.
