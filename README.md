@@ -169,5 +169,5 @@ parse the pod's annotations and add an appropriate FIM container specification t
 
 
 ## Looking at the Code in more depth
-This is not production-grade code but if you're bored, there are more implementation details in the README files in the [containers](./containers) and 
+This is not production-grade code but, if you're bored, there are more implementation details in the README files in the [containers](./containers) and 
 [k8s_resources](./k8s_resources) directories.
