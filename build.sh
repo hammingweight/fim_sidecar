@@ -2,7 +2,6 @@
 set -e
 script_dir="$( cd -- "$( dirname -- "${BASH_SOURCE[0]:-$0}"; )" &> /dev/null && pwd 2> /dev/null; )"
 
-minikube delete
 minikube start
 
 eval $(minikube docker-env)
