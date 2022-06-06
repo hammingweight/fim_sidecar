@@ -151,7 +151,7 @@ If the hashes don't match, the script (with a certain amount of hackery) determi
 `SIGKILL` to all the processes. Killing all the processes in that way crashes the container and Kubernetes restarts a new instance of the container.
 
 Two observations:
-* The `healthz` integrity test is minima; we should be checking entire directories not just a single file. Running `AIDE` in the `fim` container would be better than performing a simple hash of only one file.
+* The `healthz` integrity test is minimal we should be checking entire directories not just a single file. Running `AIDE` in the `fim` container would be better than performing a simple hash of only one file.
 * While we invoke the integrity test as a liveness check, we could run our integrity testing in a loop in the `fim` container's main process.
 
 
