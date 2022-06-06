@@ -10,12 +10,15 @@ metadata:
 spec:
   shareProcessNamespace: true
   containers:
+    # The "Hello, world" application container
     - image: hello_server:1.0
       name: helloserver
       ports:
         - containerPort: 8000
           name: http
           protocol: TCP
+          
+    # The sidecar container
     - image: fim:1.0
       name: fim
       # We need to run as privileged to access
