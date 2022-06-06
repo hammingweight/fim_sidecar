@@ -1,9 +1,31 @@
+#!/bin/ash
+
+# A script that checks the health of the application
+# container. The script is passed two arguments:
+#  * A path to a file
+#  * An expected MD5 hash
+#  If the hash of the file contents does not match
+#  the expected hash, the script SIGKILLs all
+#  processes in the application container.
+
+# This function returns all PIDs for processes that
+# are not running in the sidecar container. The script
+# works by checking for the existence of a file
+# /magic/<UUID> on the file path. That path exists
+# on the sidecar container (since this script creates
+# it) but doesn't exist in the application container.
+# If the file /proc/<PID>/root/magic/<UUID> doesn't
+# exist, the process PID is a process running in
+# the application container.
 get_pid_for_proc_in_monitored_container() {
     magic_file_name=$(cat /magic/magic_constant)
+    # Loop over all processes.
     for p in $(ps -A -o pid | grep -v PID)
     do
         if ls /proc/$p/root >/dev/null 2>&1
         then
+           # If the path doesn't exist, the process is
+           # running in the application container.
            if [ ! -f /proc/$p/root/magic/$magic_file_name ]
            then
                echo $p
@@ -12,21 +34,31 @@ get_pid_for_proc_in_monitored_container() {
     done
 }
 
+# A function to generate a magic file name where
+# the file name is a random UUID.
 create_magic_file_name() {
-    magic_file_name=$(cat /proc/sys/kernel/random/uuid)
     mkdir -p /magic
-    echo $magic_file_name > /magic/magic_constant
+    # Generate a random file name and store the name in
+    # the file /magic/magic_constant
+    magic_file_name=$(cat /proc/sys/kernel/random/uuid)
     touch /magic/$magic_file_name
+    echo $magic_file_name > /magic/magic_constant
 }
 
-if [ ! -e /magic/magic_constant ]
+
+# The entry point to the script.
+FILE_TO_MONITOR=$1
+MD5SUM=$2
+
+# If we don't have a file with a magic (UUID) name,
+# then create one.
+MAGIC_CONSTANT_FILE=/magic/magic_constant
+if [ ! -e $MAGIC_CONSTANT_FILE ]
 then
     create_magic_file_name
 fi
+magic_constant=$(cat $MAGIC_CONSTANT_FILE)
 
-
-FILE_TO_MONITOR=$1
-MD5SUM=$2
 pids=$(get_pid_for_proc_in_monitored_container $magic_constant)
 for p in $pids
 do
