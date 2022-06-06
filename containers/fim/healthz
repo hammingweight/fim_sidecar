@@ -18,7 +18,7 @@
 # exist, the process PID is a process running in
 # the application container.
 get_pid_for_proc_in_monitored_container() {
-    magic_file_name=$(cat /magic/magic_constant)
+    magic_file_name=$1
     # Loop over all processes.
     for p in $(ps -A -o pid | grep -v PID)
     do
@@ -26,7 +26,7 @@ get_pid_for_proc_in_monitored_container() {
         then
            # If the path doesn't exist, the process is
            # running in the application container.
-           if [ ! -f /proc/$p/root/magic/$magic_file_name ]
+           if [ ! -f /proc/$p/root$magic_file_name ]
            then
                echo $p
            fi
@@ -37,12 +37,14 @@ get_pid_for_proc_in_monitored_container() {
 # A function to generate a magic file name where
 # the file name is a random UUID.
 create_magic_file_name() {
-    mkdir -p /magic
+    magic_file=$1
+    magic_dir=$(dirname $magic_file)
+    mkdir -p $magic_dir
     # Generate a random file name and store the name in
     # the file /magic/magic_constant
     magic_file_name=$(cat /proc/sys/kernel/random/uuid)
-    touch /magic/$magic_file_name
-    echo $magic_file_name > /magic/magic_constant
+    touch /$magic_dir/$magic_file_name
+    echo $magic_file_name > $magic_file
 }
 
 
@@ -52,14 +54,15 @@ MD5SUM=$2
 
 # If we don't have a file with a magic (UUID) name,
 # then create one.
-MAGIC_CONSTANT_FILE=/magic/magic_constant
+MAGIC_CONSTANT_DIR=/magic
+MAGIC_CONSTANT_FILE=$MAGIC_CONSTANT_DIR/magic_constant
 if [ ! -e $MAGIC_CONSTANT_FILE ]
 then
-    create_magic_file_name
+    create_magic_file_name $MAGIC_CONSTANT_FILE
 fi
 magic_constant=$(cat $MAGIC_CONSTANT_FILE)
 
-pids=$(get_pid_for_proc_in_monitored_container $magic_constant)
+pids=$(get_pid_for_proc_in_monitored_container $MAGIC_CONSTANT_DIR/$magic_constant)
 for p in $pids
 do
     if [ "$(md5sum /proc/$p/root/$FILE_TO_MONITOR | awk '{print $1}')" != "$MD5SUM" ]
