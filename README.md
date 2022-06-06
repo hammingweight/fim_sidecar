@@ -1,4 +1,4 @@
-# A Kubernetes File Integrity Monitoring Sidecar Demo
+# A File Integrity Monitoring Kubernetes Sidecar
 A proof-of-concept project that shows how a Kubernetes sidecar can monitor the file integrity of another container. The purpose of this project isn't to
 provide production quality code; it's simply to show that it is possible to have a sidecar container monitor the file integrity of another container and to
 take remedial action if a container is hacked.
