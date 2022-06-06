@@ -1,6 +1,6 @@
 # A File Integrity Monitoring Kubernetes Sidecar
 A proof-of-concept project that shows how a Kubernetes sidecar can monitor the file integrity of another container. The purpose of this project isn't to
-provide production quality code; it's simply to show that it is possible to have a sidecar container monitor the file integrity of another container and to
+provide production quality code; it's to show that it is possible to have a sidecar container monitor the file integrity of another container and to
 take remedial action if a container is hacked.
 
 ## Container and Pod Security
@@ -92,7 +92,7 @@ helloserver   1/2     Error     0          6m21s
 helloserver   2/2     Running   1 (2s ago)   6m22s
 ```
 
-Issuing a `GET` should return the "Hello, world!" message again since the container was restarted.
+Issuing an HTTP `GET` should, once again, return the "Hello, world!" message since the container was restarted.
 
 ```
 $ curl http://10.111.46.161
@@ -151,7 +151,7 @@ If the hashes don't match, the script (with a certain amount of hackery) determi
 `SIGKILL` to all the processes. Killing all the processes in that way crashes the container and Kubernetes restarts a new instance of the container.
 
 Two observations:
-* The `healthz` integrity test is minimalist; we should be checking entire directories not just a single file. Running `AIDE` in the `fim` container would be better than performing a simple hash of only one file.
+* The `healthz` integrity test is minima; we should be checking entire directories not just a single file. Running `AIDE` in the `fim` container would be better than performing a simple hash of only one file.
 * While we invoke the integrity test as a liveness check, we could run our integrity testing in a loop in the `fim` container's main process.
 
 
@@ -159,7 +159,7 @@ Two observations:
 There are at least three improvements that should be made if you want to run file integrity monitoring from a sidecar:
 * Use proper intrusion detection software like AIDE rather than hacking some MD5 integrity checking together
 * Run the `fim` container with the minimum privileges needed
-* Provide an admission controller to create the pod definitions for the monitored container. See the next subsection.
+* Provide a dynamic admission controller to create the pod definitions for the monitored container. See the next subsection.
 
 ### Writing a FIM admission controller
 The [`hello_server_pod`](./k8s_resources/hello_server_pod.yaml) file includes a definition for the `fim` container including arguments that must be passed
