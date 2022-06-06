@@ -62,12 +62,15 @@ then
 fi
 magic_constant=$(cat $MAGIC_CONSTANT_FILE)
 
+# Find all PIDs in the monitored container.
 pids=$(get_pid_for_proc_in_monitored_container $MAGIC_CONSTANT_DIR/$magic_constant)
 for p in $pids
 do
+    # If the checksum is wrong, the container has been corrupted and we'll kill all
+    # processes to crash the container.
     if [ "$(md5sum /proc/$p/root/$FILE_TO_MONITOR | awk '{print $1}')" != "$MD5SUM" ]
     then
         echo "Killing process $p..."
-        kill -9 $p
+        kill -KILL $p
     fi
 done
