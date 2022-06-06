@@ -18,7 +18,8 @@
 # exist, the process PID is a process running in
 # the application container.
 get_pid_for_proc_in_monitored_container() {
-    magic_file_name=$1
+    magic_dir=$(dirname $1)
+    magic_file_name=$magic_dir/$(cat $1)
     # Loop over all processes.
     for p in $(ps -A -o pid | grep -v PID)
     do
@@ -60,10 +61,9 @@ if [ ! -e $MAGIC_CONSTANT_FILE ]
 then
     create_magic_file_name $MAGIC_CONSTANT_FILE
 fi
-magic_constant=$(cat $MAGIC_CONSTANT_FILE)
 
 # Find all PIDs in the monitored container.
-pids=$(get_pid_for_proc_in_monitored_container $MAGIC_CONSTANT_DIR/$magic_constant)
+pids=$(get_pid_for_proc_in_monitored_container $MAGIC_CONSTANT_FILE)
 for p in $pids
 do
     # If the checksum is wrong, the container has been corrupted and we'll kill all
