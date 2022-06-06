@@ -1,5 +1,5 @@
 # Kubernetes Resources
-This example uses two Kubernetes resources: A [pod](./hello_server_pod.yaml] and a [load balancer service](./hello_load_balancer_service.yaml) that makes the pod
+This example uses two Kubernetes resources: A [pod](./hello_server_pod.yaml) and a [load balancer service](./hello_load_balancer_service.yaml) that makes the pod
 externally accessible.
 
 ## `hello_server_pod`
