@@ -1,3 +1,6 @@
+# The helloserver pod has two containers:
+#   An HTTP server that displays "Hello, world"
+#   A file integrity monitoring sidecar
 apiVersion: v1
 kind: Pod
 metadata:
@@ -15,9 +18,14 @@ spec:
           protocol: TCP
     - image: fim:1.0
       name: fim
+      # We need to run as privileged to access
+      # the files in the helloserver container
       securityContext:
         privileged: true
       livenessProbe:
+        # We check that the application server
+        # hasn't been compromised by checking that
+        # the hash of index.html is 746308...
         exec:
           command:
           - /bin/ash
