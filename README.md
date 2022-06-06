@@ -8,23 +8,23 @@ There are many mechanisms to increase the security of applications deployed in c
  * namespaces to isolate containers
  * Linux capabilities to restrict what a container can do
  * seccomp profiles to provide fine-grained access to kernel calls
- * cgroups to limit the blast radius of a denial of service attack on a single container
+ * cgroups to limit the blast radius of a denial of service attack on a container
 
-Despite all the security primitives, it may still be advisable to run file integrity monitoring (FIM) software such as
+Despite all the security primitives, it may be prudent to run file integrity monitoring (FIM)/intrusion detection software such as
 [AIDE]( https://aide.github.io/). However, an attacker who compromises a container might also be able to disable the FIM. This repository shows one way in which a
 sidecar can monitor the file integrity of another container.
 
 The containers in a pod share the same network namespace (so they share IP addresses and network connections) and UTS namespace (so they have the same hostname).
 By default, pods do not share the same process namespace. The pod's containers obviously have distinct file systems. However, if two containers share the same process
-namespace it is possible to allow them access to each other's file systems via the `procfs` system as noted in the 
+namespace it is possible to allow them access to each other's file systems via the `procfs` virtual file system as noted in the 
 [Kubernetes documentation](https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/). This demo shows an artificially simple example of FIM
 using a sidecar container that shares a process namespace with an application container. The sidecar runs with greater privileges than the application container;
 the sidecar can access files in the application container but the application cannot read files in the sidecar container. 
 
 
 ## The Example Application
-The code creates a Kubernetes pod that delivers a single HTML page with a "Hello, world!" message. The pod contains a second (sidecar) container that 
-checks whether the contents of the HTML page has been edited and, if so, kills the processes running in the first container and relies on the Kubernetes
+The code creates a Kubernetes pod that delivers a single HTML page with a "Hello, world!" message. The pod also contains a second (sidecar) container that 
+checks whether the contents of the HTML page has been modified and, if so, kills the processes running in the first container and relies on the Kubernetes
 controlplane to start a new instance of the container. The pod is exposed to the outside world by a LoadBalancer service.
 
 ### Prerequisites
@@ -101,7 +101,7 @@ Hello, world!
 
 ## How does this work?
 ### Accessing files via `procfs`
-To see how this works, get an `ash` shell to the `fim` container in the `helloserver` pod and list the processes.
+To see how this works, open an `ash` shell to the `fim` container in the `helloserver` pod and list the processes.
 
 ```
 $ kubectl exec -it helloserver -c fim -- ash
@@ -116,7 +116,7 @@ PID   USER     TIME  COMMAND
 
 The `ash` process, for example, is running within the `fim` container but the `SimpleHTTPServer` with PID 7 is running in the `helloserver` container.
 Since the `fim` container is running with elevated privileges, we can access files on the `helloserver` container via symlinks in the `procfs` filesystem.
-Since the PID is 7, we can access the `index.html` file by running
+Using the fact that the PID of a process running in the `helloserver` container is 7, we can access the `index.html` file by running
 
 ```
 / # cat /proc/7/root/home/hellouser/index.html
