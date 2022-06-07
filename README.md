@@ -165,7 +165,7 @@ There are at least three improvements that should be made if you want to run fil
 The [`hello_server_pod`](./k8s_resources/hello_server_pod.yaml) file includes a definition for the `fim` container including arguments that must be passed
 to the pod's liveness check. End users should only need to specify their own container in the pod
 definition and use metadata annotations to identify files and directories that should be monitored as part of intrusion detection. A FIM admission controller would
-parse the pod's annotations and add an appropriate FIM container specification to the the pod manifest.
+parse the pod's annotations and add an appropriate FIM container specification to the pod manifest.
 
 
 ## Looking at the Code in more depth
