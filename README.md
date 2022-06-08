@@ -157,7 +157,7 @@ Two observations:
 
 ## Getting this Code Production-ready
 There are at least three improvements that should be made to run file integrity monitoring from a sidecar:
-* Use proper intrusion detection software like AIDE or [Tripewire](https://tripwire.com) rather than hacking some MD5 integrity checking together
+* Use proper intrusion detection software like AIDE or [Tripwire](https://tripwire.com) rather than hacking some MD5 integrity checking together
 * Run the `fim` container with the minimum privileges needed
 * Provide a dynamic admission controller to create the pod definitions for the monitored container. See the next subsection.
 
