@@ -50,6 +50,11 @@ get_pids_for_monitored_container() {
 
 
 # The entry point to the script.
+if [ $# != 2 ]
+then
+    echo "Usage: $0 <path_to_file> <expected_md5_hash_of_file>"
+    exit 1
+fi
 FILE_TO_MONITOR=$1
 MD5SUM=$2
 
