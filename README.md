@@ -1,5 +1,5 @@
 # A File Integrity Monitoring Kubernetes Sidecar
-A proof-of-concept project that shows how a Kubernetes sidecar can monitor the file integrity of another container. The purpose of this project isn't to
+Example code that shows how a Kubernetes sidecar can monitor the file integrity of another container. The purpose of this project isn't to
 provide production quality code; it's to show that it is possible to have a sidecar container monitor the file integrity of another container and to
 take remedial action if a container is hacked.
 
@@ -10,22 +10,22 @@ There are many mechanisms to increase the security of applications deployed in c
  * seccomp profiles to provide fine-grained access to kernel calls
  * cgroups to limit the blast radius of a denial of service attack on a container
 
-Despite all the security primitives, it may be prudent to run file integrity monitoring (FIM)/intrusion detection software such as
+Despite all the container security options, it may still be prudent to run file integrity monitoring (FIM)/intrusion detection software such as
 [AIDE]( https://aide.github.io/). However, an attacker who compromises a container might also be able to disable the FIM. This repository shows one way in which a
 sidecar can monitor the file integrity of another container.
 
-The containers in a pod share the same network namespace (so they share IP addresses and network connections) and UTS namespace (so they have the same hostname).
-By default, pods do not share the same process namespace. The pod's containers obviously have distinct file systems. However, if two containers share the same process
-namespace it is possible to allow them access to each other's file systems via the `procfs` virtual file system as noted in the 
-[Kubernetes documentation](https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/). This demo shows an artificially simple example of FIM
-using a sidecar container that shares a process namespace with an application container. The sidecar runs with greater privileges than the application container;
-the sidecar can access files in the application container but the application cannot read files in the sidecar container. 
+The containers in a pod share the same network namespace (so they share IP addresses and network connections) and the same UTS namespace (so they have the same 
+hostname). By default, pods do not share the same process namespace. The pod's containers obviously have distinct file systems. However, if two containers share the 
+same process namespace it is possible to allow them access to each other's file systems via the `procfs` virtual file system as noted in the 
+[Kubernetes documentation](https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/). This example shows an artificially simple example of 
+FIM using a sidecar container that shares a process namespace with an application container. The sidecar runs with greater privileges than the application 
+container; the sidecar can access files in the application container but the application cannot read files in the sidecar container. 
 
 
 ## The Example Application
 The code creates a Kubernetes pod that delivers a single HTML page with a "Hello, world!" message. The pod also contains a second (sidecar) container that 
 checks whether the contents of the HTML page has been modified and, if so, kills the processes running in the first container and relies on the Kubernetes
-controlplane to start a new instance of the container. The pod is exposed to the outside world by a LoadBalancer service.
+controlplane to start a new instance of the container. The pod's service is exposed to the outside world by a LoadBalancer.
 
 ### Prerequisites
 You'll need locally installed versions of
@@ -82,7 +82,7 @@ hellouser@helloserver:~$ echo hacked > index.html && exit
 exit
 ```
 
-The terminal showing the state of the pod should show the pod go into error and then get restarted.
+The terminal showing the pod's state should show the pod go into error and then get restarted.
 
 ```
 $ kubectl get pods -w
@@ -92,7 +92,7 @@ helloserver   1/2     Error     0          6m21s
 helloserver   2/2     Running   1 (2s ago)   6m22s
 ```
 
-Issuing an HTTP `GET` should, once again, return the "Hello, world!" message since the container was restarted.
+Issuing an HTTP `GET` request should, once again, return the "Hello, world!" message since the container was restarted.
 
 ```
 $ curl http://10.111.46.161
