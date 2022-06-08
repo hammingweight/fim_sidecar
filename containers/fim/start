@@ -1,0 +1,3 @@
+#!/bin/ash
+echo "Starting FIM container."
+exec sleep infinity

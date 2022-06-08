@@ -1,3 +1,4 @@
 FROM busybox:latest
 COPY healthz .
-CMD ["sleep", "infinity"]
+COPY start .
+CMD ["/bin/ash", "/start"]
