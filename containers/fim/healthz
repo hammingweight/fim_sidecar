@@ -8,6 +8,19 @@
 #  the expected hash, the script SIGKILLs all
 #  processes in the application container.
 
+# A function to generate a magic file name where
+# the file name is a random UUID.
+create_magic_file_name() {
+    magic_file=$1
+    magic_dir=$(dirname $magic_file)
+    mkdir -p $magic_dir
+    # Generate a random file name and store the name in
+    # the file /magic/magic_constant
+    magic_file_name=$(cat /proc/sys/kernel/random/uuid)
+    touch /$magic_dir/$magic_file_name
+    echo $magic_file_name > $magic_file
+}
+
 # This function returns all PIDs for processes that
 # are not running in the sidecar container. The script
 # works by checking for the existence of a file
@@ -33,19 +46,6 @@ get_pids_for_monitored_container() {
            fi
         fi
     done
-}
-
-# A function to generate a magic file name where
-# the file name is a random UUID.
-create_magic_file_name() {
-    magic_file=$1
-    magic_dir=$(dirname $magic_file)
-    mkdir -p $magic_dir
-    # Generate a random file name and store the name in
-    # the file /magic/magic_constant
-    magic_file_name=$(cat /proc/sys/kernel/random/uuid)
-    touch /$magic_dir/$magic_file_name
-    echo $magic_file_name > $magic_file
 }
 
 
