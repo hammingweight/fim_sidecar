@@ -20,8 +20,8 @@
 get_pids_for_monitored_container() {
     magic_dir=$(dirname $1)
     magic_file_name=$magic_dir/$(cat $1)
-    # Loop over all processes.
-    for p in $(ps -A -o pid | grep -v PID)
+    # Loop over all processes except PID 1.
+    for p in $(ps -A -o pid= | tr -d " " | grep -v ^1$)
     do
         if ls /proc/$p/root >/dev/null 2>&1
         then
