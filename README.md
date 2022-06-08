@@ -145,19 +145,19 @@ ls: cannot access '/proc/13/root': Permission denied
 ```
 
 ### Checking file integrity as a liveness check
-By default, Kubernetes polls containers for their liveness every 5 seconds. The `fim` container is configured to invoke the [`healthz`](./containers/fim/healthz)
-script. This is a very simple script that takes a file name and an MD5 hash value as arguments and checks that the file contents has the expected hash.
+By default, Kubernetes polls containers for their liveness every 5 seconds. The `fim` container's liveness probe runs the [`healthz`](./containers/fim/healthz)
+script. Thie script takes a file name and an MD5 hash value as arguments and checks that the file contents has the expected hash.
 If the hashes don't match, the script (with a certain amount of hackery) determines all the processes running in the monitored container and issues a
 `SIGKILL` to all the processes. Killing all the processes in that way crashes the container and Kubernetes restarts a new instance of the container.
 
 Two observations:
-* The `healthz` integrity test is minimal we should be checking entire directories not just a single file. Running `AIDE` in the `fim` container would be better than performing a simple hash of only one file.
+* The `healthz` integrity test is minimal; we should be checking entire directories not just a single file. Running `AIDE` in the `fim` container would be better than performing a simple hash of only one file.
 * While we invoke the integrity test as a liveness check, we could run our integrity testing in a loop in the `fim` container's main process.
 
 
 ## Getting this Code Production-ready
-There are at least three improvements that should be made if you want to run file integrity monitoring from a sidecar:
-* Use proper intrusion detection software like AIDE rather than hacking some MD5 integrity checking together
+There are at least three improvements that should be made to run file integrity monitoring from a sidecar:
+* Use proper intrusion detection software like AIDE or [Tripewire](https://tripwire.com) rather than hacking some MD5 integrity checking together
 * Run the `fim` container with the minimum privileges needed
 * Provide a dynamic admission controller to create the pod definitions for the monitored container. See the next subsection.
 
