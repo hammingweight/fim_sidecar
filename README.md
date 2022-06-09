@@ -108,13 +108,13 @@ $ kubectl exec -it helloserver -c fim -- ash
 / # ps aux
 PID   USER     TIME  COMMAND
     1 65535     0:00 /pause
-    7 1000      0:00 python -m SimpleHTTPServer
+    7 1000      0:00 python -m http.server
    13 root      0:00 sleep infinity
   531 root      0:00 ash
   563 root      0:00 ps aux
 ```
 
-The `ash` process, for example, is running within the `fim` container but the `SimpleHTTPServer` with PID 7 is running in the `helloserver` container.
+The `ash` process, for example, is running within the `fim` container but the `http.server` process with PID 7 is running in the `helloserver` container.
 Since the `fim` container is running with elevated privileges, we can access files on the `helloserver` container via symlinks in the `procfs` filesystem.
 Using the fact that the PID of a process running in the `helloserver` container is 7, we can access the `index.html` file by running
 
@@ -130,7 +130,7 @@ $ kubectl exec -it helloserver -c helloserver -- bash
 hellouser@helloserver:~$ ps aux
 USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
 65535          1  0.0  0.0    972     4 ?        Ss   10:00   0:00 /pause
-hellous+       7  0.0  0.1  19168 13512 ?        Ss   10:00   0:00 python -m SimpleHTTPServer
+hellous+       7  0.0  0.1  19168 13512 ?        Ss   10:00   0:00 python -m http.server
 root          13  0.0  0.0   1316     4 ?        Ss   10:00   0:00 sleep infinity
 hellous+    3138  1.0  0.0   5756  3704 pts/0    Ss   10:20   0:00 bash
 hellous+    3146  0.0  0.0   9396  3008 pts/0    R+   10:20   0:00 ps aux

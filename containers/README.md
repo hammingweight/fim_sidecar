@@ -4,7 +4,7 @@ This repository contains Dockerfiles for two containers:
 * A sidecar container that monitors the file integrity of the application container
 
 ## Application Container
-The application (`hello_server`) [container](./hello_server/Dockerfile) runs a Python `SimpleHTTPServer` that exposes a single [HTML page](./hello_server/index.html) that displays "Hello, world!".
+The application (`hello_server`) [container](./hello_server/Dockerfile) runs a Python `http.server` that exposes a single [HTML page](./hello_server/index.html) that displays "Hello, world!".
 The container is run as a non-root user, `hellouser`.
 
 ## Sidecar Container
