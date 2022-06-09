@@ -145,7 +145,7 @@ ls: cannot access '/proc/13/root': Permission denied
 ```
 
 ### Checking file integrity as a liveness check
-By default, Kubernetes polls containers for their liveness every 5 seconds. The `fim` container's liveness probe runs the [`healthz`](./containers/fim/healthz)
+By default, Kubernetes polls containers for their liveness every 10 seconds. The `fim` container's liveness probe runs the [`healthz`](./containers/fim/healthz)
 script. Thie script takes a file name and an MD5 hash value as arguments and checks that the file contents has the expected hash.
 If the hashes don't match, the script (with a certain amount of hackery) determines all the processes running in the monitored container and issues a
 `SIGKILL` to all the processes. Killing all the processes in that way crashes the container and Kubernetes restarts a new instance of the container.
