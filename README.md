@@ -162,7 +162,7 @@ There are at least three improvements that should be made to run file integrity 
 * Provide a dynamic admission controller to create the pod definitions for the monitored container. See the next subsection.
 
 ### Writing a FIM admission controller
-The [`hello_server_pod`](./k8s_resources/hello_server_pod.yaml) file includes a definition for the `fim` container including arguments that must be passed
+The [`hello_server_pod`](./k8s_manifests/hello_server_pod.yaml) file includes a definition for the `fim` container including arguments that must be passed
 to the pod's liveness check. End users should only need to specify their own container in the pod
 definition and use metadata annotations to identify files and directories that should be monitored as part of intrusion detection. A FIM admission controller would
 parse the pod's annotations and add an appropriate FIM container specification to the pod manifest.
@@ -170,4 +170,4 @@ parse the pod's annotations and add an appropriate FIM container specification t
 
 ## Looking at the Code in more depth
 This is not production-grade code but, if you're bored, there are more implementation details in the README files in the [containers](./containers) and 
-[k8s_resources](./k8s_resources) directories.
+[k8s_manifests](./k8s_manifests) directories.
