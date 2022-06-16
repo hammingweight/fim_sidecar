@@ -10,10 +10,10 @@ The `hello_server_pod` has two containers:
 The pod overrides the default value of `shareProcessNamespace` and sets it to [true](https://github.com/hammingweight/fim_sidecar/blob/ed219a82efb2e2e4fa68dd33996fb09aee22e91e/k8s_resources/hello_server_pod.yaml#L11) so that the application and
 sidecar processes share the same process namespace; i.e. you can view the processes in both containers from either container.
 
-The `fim` container runs with [elevated privileges](https://github.com/hammingweight/fim_sidecar/blob/ed219a82efb2e2e4fa68dd33996fb09aee22e91e/k8s_resources/hello_server_pod.yaml#L24) so that the container
+The `fim` container runs with [elevated privileges](https://github.com/hammingweight/fim_sidecar/blob/1acc0a8bb9f62c8f3dd06c80b3d9defaf931588b/k8s_manifests/hello_server_pod.yaml#L33) so that the container
 can view all files in the `hello_server` container which is necessary to check the integrity of the files.
 
-The `fim` container has a [`livenessProbe`]( https://github.com/hammingweight/fim_sidecar/blob/ed219a82efb2e2e4fa68dd33996fb09aee22e91e/k8s_resources/hello_server_pod.yaml#L25) that checks the integrity of the `index.html` file.
+The `fim` container has a [`livenessProbe`](https://github.com/hammingweight/fim_sidecar/blob/1acc0a8bb9f62c8f3dd06c80b3d9defaf931588b/k8s_manifests/hello_server_pod.yaml#L34) that checks the integrity of the `index.html` file.
 
 ## `hello_load_balancer_service`
 The `hello_load_balancer_service` service is a simple Load Balancer service that routes requests on port 80 to port 8000 of the `hello_server` container.
