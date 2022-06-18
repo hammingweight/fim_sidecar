@@ -115,7 +115,7 @@ PID   USER     TIME  COMMAND
 ```
 
 The `ash` process, for example, is running within the `fim` container but the `http.server` process with PID 7 is running in the `hello-server` container.
-Since the `fim` container is running with elevated privileges, we can access files on the `hello-server` container via symlinks in the `procfs` filesystem.
+The `fim` container is running with the `CAP_SYS_PTRACE` capability and, so, we can access files on the `hello-server` container via symlinks in the `procfs` filesystem.
 Using the fact that the PID of a process running in the `hello-server` container is 7, we can access the `index.html` file by running
 
 ```
@@ -136,8 +136,7 @@ hellous+    3138  1.0  0.0   5756  3704 pts/0    Ss   10:20   0:00 bash
 hellous+    3146  0.0  0.0   9396  3008 pts/0    R+   10:20   0:00 ps aux
 ```
 
-Process 13 is running in the `fim` container but, this time, we cannot access the files since the `hello-server` container is not running with elevated
-privileges
+Process 13 is running in the `fim` container but, this time, we cannot access the files since the `hello-server` container is not running with the necessary capability to access `/proc/<PID>` for an arbitrary process.
 
 ```
 hellouser@hello-server:~$ ls /proc/13/root
@@ -156,9 +155,8 @@ Two observations:
 
 
 ## Getting this Code Production-ready
-There are at least three improvements that should be made to run file integrity monitoring from a sidecar:
+There are at least two improvements that should be made to run file integrity monitoring from a sidecar:
 * Use proper intrusion detection software like AIDE or [Tripwire](https://tripwire.com) rather than hacking some MD5 integrity checking together
-* Run the `fim` container with the minimum privileges needed
 * Provide a dynamic admission controller to create the pod definitions for the monitored container. See the next subsection.
 
 ### Writing a FIM admission controller
