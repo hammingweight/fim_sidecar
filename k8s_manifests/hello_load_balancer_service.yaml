@@ -1,4 +1,4 @@
-# We expose the helloserver pod via a
+# We expose the hello-server pod via a
 # LoadBalancer service that listens on
 # port 80 and routes requests to port
 # 8000 of the pod.
@@ -14,5 +14,5 @@ spec:
     protocol: TCP
     targetPort: 8000
   selector:
-    app: helloserver
+    app: hello-server
   type: LoadBalancer

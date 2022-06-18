@@ -1,12 +1,12 @@
-# The helloserver pod has two containers:
+# The hello-server pod has two containers:
 #   An HTTP server that displays "Hello, world"
 #   A file integrity monitoring sidecar
 apiVersion: v1
 kind: Pod
 metadata:
-  name: helloserver
+  name: hello-server
   labels:
-    app: helloserver
+    app: hello-server
   annotations:
     # This annotation isn't actually used. It
     # would be nice if we had a dynamic admission
@@ -18,7 +18,7 @@ spec:
   containers:
     # The "Hello, world" application container
     - image: docker.io/hammingweight/hello_server:1.0.0
-      name: helloserver
+      name: hello-server
       ports:
         - containerPort: 8000
           name: http
@@ -28,7 +28,7 @@ spec:
     - image: docker.io/hammingweight/fim:1.0.0
       name: fim
       # We need to run as privileged to access
-      # the files in the helloserver container
+      # the files in the hello-server container
       securityContext:
         privileged: true
       livenessProbe:

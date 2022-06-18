@@ -45,8 +45,8 @@ the pod contains two containers.
 
 ```
 $ kubectl get pods
-NAME          READY   STATUS    RESTARTS   AGE
-helloserver   2/2     Running   0          10s
+NAME           READY   STATUS    RESTARTS   AGE
+hello-server   2/2     Running   0          10s
 ```
 
 Create a tunnel to access the minikube cluster
@@ -70,15 +70,15 @@ Now, set a watch on the pods
 
 ```
 $ kubectl get pods -w
-NAME          READY   STATUS    RESTARTS   AGE
-helloserver   2/2     Running   0          5m26s
+NAME           READY   STATUS    RESTARTS   AGE
+hello-server   2/2     Running   0          5m26s
 ```
 
-Next, in another terminal, modify the `index.html` page in the `helloserver` application container (which is in the `helloserver` pod)
+Next, in another terminal, modify the `index.html` page in the `hello-server` application container (which is in the `hello-server` pod)
 
 ```
-$ kubectl exec -it helloserver -c helloserver -- bash
-hellouser@helloserver:~$ echo hacked > index.html && exit
+$ kubectl exec -it hello-server -c hello-server -- bash
+hellouser@hello-server:~$ echo hacked > index.html && exit
 exit
 ```
 
@@ -86,10 +86,10 @@ The terminal showing the pod's state should show the pod go into error and then 
 
 ```
 $ kubectl get pods -w
-NAME          READY   STATUS    RESTARTS   AGE
-helloserver   2/2     Running   0          5m26s
-helloserver   1/2     Error     0          6m21s
-helloserver   2/2     Running   1 (2s ago)   6m22s
+NAME           READY   STATUS    RESTARTS   AGE
+hello-server   2/2     Running   0          5m26s
+hello-server   1/2     Error     0          6m21s
+hello-server   2/2     Running   1 (2s ago)   6m22s
 ```
 
 Issuing an HTTP `GET` request should, once again, return the "Hello, world!" message since the container was restarted.
@@ -101,10 +101,10 @@ Hello, world!
 
 ## How does this work?
 ### Accessing files via `procfs`
-To see how this works, open an `ash` shell to the `fim` container in the `helloserver` pod and list the processes.
+To see how this works, open an `ash` shell to the `fim` container in the `hello-server` pod and list the processes.
 
 ```
-$ kubectl exec -it helloserver -c fim -- ash
+$ kubectl exec -it hello-server -c fim -- ash
 / # ps aux
 PID   USER     TIME  COMMAND
     1 65535     0:00 /pause
@@ -114,20 +114,20 @@ PID   USER     TIME  COMMAND
   563 root      0:00 ps aux
 ```
 
-The `ash` process, for example, is running within the `fim` container but the `http.server` process with PID 7 is running in the `helloserver` container.
-Since the `fim` container is running with elevated privileges, we can access files on the `helloserver` container via symlinks in the `procfs` filesystem.
-Using the fact that the PID of a process running in the `helloserver` container is 7, we can access the `index.html` file by running
+The `ash` process, for example, is running within the `fim` container but the `http.server` process with PID 7 is running in the `hello-server` container.
+Since the `fim` container is running with elevated privileges, we can access files on the `hello-server` container via symlinks in the `procfs` filesystem.
+Using the fact that the PID of a process running in the `hello-server` container is 7, we can access the `index.html` file by running
 
 ```
 / # cat /proc/7/root/home/hellouser/index.html
 Hello, world!
 ```
 
-We can try a similar experiment in the `helloserver` container by opening a `bash` shell
+We can try a similar experiment in the `hello-server` container by opening a `bash` shell
 
 ```
-$ kubectl exec -it helloserver -c helloserver -- bash
-hellouser@helloserver:~$ ps aux
+$ kubectl exec -it hello-server -c hello-server -- bash
+hellouser@hello-server:~$ ps aux
 USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
 65535          1  0.0  0.0    972     4 ?        Ss   10:00   0:00 /pause
 hellous+       7  0.0  0.1  19168 13512 ?        Ss   10:00   0:00 python -m http.server
@@ -136,11 +136,11 @@ hellous+    3138  1.0  0.0   5756  3704 pts/0    Ss   10:20   0:00 bash
 hellous+    3146  0.0  0.0   9396  3008 pts/0    R+   10:20   0:00 ps aux
 ```
 
-Process 13 is running in the `fim` container but, this time, we cannot access the files since the `helloserver` container is not running with elevated
+Process 13 is running in the `fim` container but, this time, we cannot access the files since the `hello-server` container is not running with elevated
 privileges
 
 ```
-hellouser@helloserver:~$ ls /proc/13/root
+hellouser@hello-server:~$ ls /proc/13/root
 ls: cannot access '/proc/13/root': Permission denied
 ```
 
