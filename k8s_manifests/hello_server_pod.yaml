@@ -17,7 +17,7 @@ spec:
   shareProcessNamespace: true
   containers:
     # The "Hello, world" application container
-    - image: hello_server:1.0
+    - image: docker.io/hammingweight/hello_server:1.0.0
       name: helloserver
       ports:
         - containerPort: 8000
@@ -25,7 +25,7 @@ spec:
           protocol: TCP
           
     # The sidecar container
-    - image: fim:1.0
+    - image: docker.io/hammingweight/fim:1.0.0
       name: fim
       # We need to run as privileged to access
       # the files in the helloserver container
