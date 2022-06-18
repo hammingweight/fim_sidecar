@@ -1,0 +1,12 @@
+# Default values for hello-server.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+podName: ""
+
+serviceName: ""
+
+service:
+  type: LoadBalancer
+  port: 80
+
+fimVersion: 1.0.0

@@ -1,0 +1,49 @@
+# The hello-server pod has two containers:
+#   An HTTP server that displays "Hello, world"
+#   A file integrity monitoring sidecar
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ include "hello-server.podname" . }}
+  labels:
+    app: {{ include "hello-server.podname" . }}
+  annotations:
+    # This annotation isn't actually used. It
+    # would be nice if we had a dynamic admission
+    # controller to generate the FIM container to
+    # monitor the files specified via annotations.
+    "hammingweight.com/monitored_files": "/home/hellouser/index.html"
+spec:
+  shareProcessNamespace: true
+  containers:
+    # The "Hello, world" application container
+    - image: docker.io/hammingweight/hello_server:{{ .Chart.AppVersion }}
+      name: hello-server
+      ports:
+        - containerPort: 8000
+          name: http
+          protocol: TCP
+          
+    # The sidecar container
+    - image: docker.io/hammingweight/fim:{{ .Values.fimVersion }}
+      name: fim
+      # We need to run as privileged to access
+      # the files in the hello-server container
+      securityContext:
+        capabilities:
+          drop:
+            - ALL
+          add:
+            - DAC_READ_SEARCH
+            - KILL
+            - SYS_PTRACE
+      livenessProbe:
+        # We check that the application server
+        # hasn't been compromised by checking that
+        # the hash of index.html is 746308...
+        exec:
+          command:
+          - /bin/ash
+          - /healthz
+          - /home/hellouser/index.html
+          - 746308829575e17c3331bbcb00c0898b
