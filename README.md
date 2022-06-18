@@ -28,12 +28,14 @@ checks whether the contents of the HTML page has been modified and, if so, kills
 controlplane to start a new instance of the container. The pod's service is exposed to the outside world by a LoadBalancer.
 
 ### Prerequisites
-You'll need locally installed versions of
+Ideally, you'll need locally installed versions of
  * Docker
  * Minikube
 
+If you don't have Docker or Minikube installed, you can use `Helm` to deploy this example as described in the [`helm`](./helm/README.md) directory.
+
 ### Building and running the application
-To build and run the application, execute
+If you have Docker and Minikube installed, you can build and run the application by executing
 
 ```
 $ ./build.sh
