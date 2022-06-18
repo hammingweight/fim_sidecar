@@ -30,7 +30,13 @@ spec:
       # We need to run as privileged to access
       # the files in the hello-server container
       securityContext:
-        privileged: true
+        capabilities:
+          drop:
+            - ALL
+          add:
+            - DAC_READ_SEARCH
+            - KILL
+            - SYS_PTRACE
       livenessProbe:
         # We check that the application server
         # hasn't been compromised by checking that
