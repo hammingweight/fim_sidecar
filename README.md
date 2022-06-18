@@ -55,13 +55,13 @@ Create a tunnel to access the minikube cluster
 $ minikube tunnel
 ```
 
-You should then be able to access the `helloservice` via its external IP address
+You should then be able to access the `hello-service` via its external IP address
 
 ```
 $ kubectl get services
-NAME           TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)        AGE
-helloservice   LoadBalancer   10.111.46.161   10.111.46.161   80:32469/TCP   2m30s
-kubernetes     ClusterIP      10.96.0.1       <none>          443/TCP        3m58s
+NAME            TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)        AGE
+hello-service   LoadBalancer   10.111.46.161   10.111.46.161   80:32469/TCP   2m30s
+kubernetes      ClusterIP      10.96.0.1       <none>          443/TCP        3m58s
 $ curl http://10.111.46.161
 Hello, world!
 ```
