@@ -103,7 +103,11 @@ Hello, world!
 
 ## How does this work?
 ### Accessing files via `procfs`
-To see how this works, open an `ash` shell to the `fim` container in the `hello-server` pod and list the processes.
+There are two tricks to get this to work:
+ * The application and sidecar containers must share a process namespace
+ * The sidecar container must be given the `CAP_SYS_PTRACE` capability  
+
+To see this work, open an `ash` shell to the `fim` container in the `hello-server` pod and list the processes.
 
 ```
 $ kubectl exec -it hello-server -c fim -- ash
