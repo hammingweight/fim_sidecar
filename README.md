@@ -32,7 +32,7 @@ Ideally, you'll need locally installed versions of
  * Docker
  * Minikube
 
-If you don't have Docker or Minikube installed, you can use `Helm` to deploy this example as described in the [`helm`](./helm/README.md) directory.
+If you don't have Docker or Minikube installed, you can use `Helm` to deploy the application in a cluster as described in the [`helm`](./helm/README.md) directory.
 
 ### Building and running the application
 If you have Docker and Minikube installed, you can build and run the application by executing
@@ -121,7 +121,7 @@ PID   USER     TIME  COMMAND
 ```
 
 The `ash` process, for example, is running within the `fim` container but the `http.server` process with PID 7 is running in the `hello-server` container.
-The `fim` container is running with the `CAP_SYS_PTRACE` capability and, so, it will be able to access files in the `hello-server` container via the `procfs` filesystem.
+The `fim` container is running with the `CAP_SYS_PTRACE` capability and, so, it will be able to access files in the `hello-server` container via `procfs`.
 Using the fact that the PID of a process running in the `hello-server` container is 7, we can access the `index.html` file by running
 
 ```
