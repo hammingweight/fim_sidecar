@@ -117,7 +117,7 @@ PID   USER     TIME  COMMAND
 ```
 
 The `ash` process, for example, is running within the `fim` container but the `http.server` process with PID 7 is running in the `hello-server` container.
-The `fim` container is running with the `CAP_SYS_PTRACE` capability and, so, we can access files on the `hello-server` container via symlinks in the `procfs` filesystem.
+The `fim` container is running with the `CAP_SYS_PTRACE` capability and, so, it will be able to access files in the `hello-server` container via the `procfs` filesystem.
 Using the fact that the PID of a process running in the `hello-server` container is 7, we can access the `index.html` file by running
 
 ```
