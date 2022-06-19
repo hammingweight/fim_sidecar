@@ -6,7 +6,7 @@ kind: Pod
 metadata:
   name: hello-server
   labels:
-    app: hello-server
+    app.kubernetes.io/name: hello-server
   annotations:
     # This annotation isn't actually used. It
     # would be nice if we had a dynamic admission

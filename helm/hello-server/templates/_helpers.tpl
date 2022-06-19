@@ -1,5 +1,5 @@
 {{/*
-Generate a name for the Service.
+The service name.
 */}}
 {{- define "hello-server.servicename" -}}
 {{- if .Values.serviceName }}
@@ -10,7 +10,7 @@ Generate a name for the Service.
 {{- end }}
 
 {{/*
-Generate a name for the Pod.
+The pod (app) name.
 */}}
 {{- define "hello-server.podname" -}}
 {{- if .Values.podName }}
@@ -18,4 +18,11 @@ Generate a name for the Pod.
 {{- else }}
 {{- printf "%s-server" .Release.Name }}
 {{- end }}
+{{- end }}
+
+{{/*
+The selector labels.
+*/}}
+{{- define "hello-server.selectorLabels" -}}
+app: {{ include "hello-server.podname" . }}
 {{- end }}
