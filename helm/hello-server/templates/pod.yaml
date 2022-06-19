@@ -4,7 +4,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: {{ include "hello-server.podname" . }}
+  name: {{ include "hello-server.podName" . }}
   labels:
     {{ include "hello-server.selectorLabels" . | nindent 4 }}
   annotations:

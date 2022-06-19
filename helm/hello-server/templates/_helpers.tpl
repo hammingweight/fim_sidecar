@@ -1,7 +1,7 @@
 {{/*
 The service name.
 */}}
-{{- define "hello-server.servicename" -}}
+{{- define "hello-server.serviceName" -}}
 {{- if .Values.serviceName }}
 {{- .Values.serviceName }}
 {{- else }}
@@ -12,7 +12,7 @@ The service name.
 {{/*
 The pod (app) name.
 */}}
-{{- define "hello-server.podname" -}}
+{{- define "hello-server.podName" -}}
 {{- if .Values.podName }}
 {{- .Values.podName }}
 {{- else }}
@@ -24,6 +24,6 @@ The pod (app) name.
 The selector labels.
 */}}
 {{- define "hello-server.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "hello-server.podname" . }}
+app.kubernetes.io/name: {{ include "hello-server.podName" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
