@@ -12,5 +12,5 @@ spec:
     protocol: TCP
     targetPort: 8000
   selector:
-    app.kubernetes.io/name: hello-server
+    app.kubernetes.io/name: hello
   type: LoadBalancer
