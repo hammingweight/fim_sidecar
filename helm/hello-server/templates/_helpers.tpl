@@ -24,5 +24,6 @@ The pod (app) name.
 The selector labels.
 */}}
 {{- define "hello-server.selectorLabels" -}}
-app: {{ include "hello-server.podname" . }}
+app.kubernetes.io/name: {{ include "hello-server.podname" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}

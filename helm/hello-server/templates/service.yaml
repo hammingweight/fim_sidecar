@@ -12,5 +12,5 @@ spec:
     protocol: TCP
     targetPort: 8000
   selector:
-    app: {{ include "hello-server.podname" . }}
+    {{ include "hello-server.selectorLabels" . | nindent 4 }}
   type: {{ .Values.service.type }}
