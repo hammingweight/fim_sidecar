@@ -1,7 +1,7 @@
 # A File Integrity Monitoring Kubernetes Sidecar
-Example code that shows how a Kubernetes sidecar can monitor the file integrity of another container. The purpose of this project isn't to
-provide production quality code; it's to show that it is possible to have a sidecar container monitor the file integrity of another container and to
-take remedial action if a container is hacked.
+This repository shows how a Kubernetes sidecar can monitor the file integrity of another container. The purpose of this project isn't 
+to provide production quality code; it's to show that it is possible to have a sidecar perform intrusion detection for another container and to take
+remedial action.
 
 ## Container and Pod Security
 There are many mechanisms to increase the security of applications deployed in containers such as:
