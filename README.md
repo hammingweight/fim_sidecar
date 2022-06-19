@@ -103,11 +103,11 @@ Hello, world!
 
 ## How does this work?
 ### Accessing files via `procfs`
-There are two tricks to get this to work:
- * The application and sidecar containers must share a process namespace
- * The sidecar container must be given the `CAP_SYS_PTRACE` capability  
+There are two tricks needed to get this to work:
+ * The application and sidecar containers must [share a process namespace](https://github.com/hammingweight/fim_sidecar/blob/30f240d819bb39637b2f48b8d75b303244ec9233/k8s_manifests/hello_server_pod.yaml#L17)
+ * The sidecar container must be given the [`CAP_SYS_PTRACE`]( https://github.com/hammingweight/fim_sidecar/blob/30f240d819bb39637b2f48b8d75b303244ec9233/k8s_manifests/hello_server_pod.yaml#L39) capability  
 
-To see this work, open an `ash` shell to the `fim` container in the `hello-server` pod and list the processes.
+To see this in action, open an `ash` shell to the `fim` container in the `hello-server` pod and list the processes.
 
 ```
 $ kubectl exec -it hello-server -c fim -- ash
