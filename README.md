@@ -121,8 +121,8 @@ PID   USER     TIME  COMMAND
 ```
 
 The `ash` process, for example, is running within the `fim` container but the `http.server` process with PID 7 is running in the `hello-server` container.
-The `fim` container is running with the `CAP_SYS_PTRACE` capability and, so, it will be able to access files in the `hello-server` container via `procfs`.
-Using the fact that the PID of a process running in the `hello-server` container is 7, we can access the `index.html` file by running
+The `fim` container is running with the `CAP_SYS_PTRACE` capability and, so, it is able to read files in the `hello-server` container via `procfs`.
+Using the fact that the PID of a process running in the `hello-server` container is 7, we can access the application's `index.html` file by running
 
 ```
 / # cat /proc/7/root/home/hellouser/index.html
