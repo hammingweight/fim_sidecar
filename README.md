@@ -51,7 +51,7 @@ NAME           READY   STATUS    RESTARTS   AGE
 hello-server   2/2     Running   0          10s
 ```
 
-Create a tunnel to access the minikube cluster
+Create a tunnel to minikube
 
 ```
 $ minikube tunnel
