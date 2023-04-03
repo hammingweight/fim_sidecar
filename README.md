@@ -172,6 +172,6 @@ definition and use metadata annotations to identify files and directories that s
 parse the pod's annotations and add an appropriate FIM container specification to the pod manifest.
 
 
-## Looking at the Code in more depth
+## Looking at the code in more depth
 This is not production-grade code but, if you're bored, there are more implementation details in the README files in the [containers](./containers) and 
 [k8s_manifests](./k8s_manifests) directories.
