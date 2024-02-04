@@ -5,7 +5,7 @@ resource "kubernetes_service" "hello" {
   spec {
     selector = local.pod_labels
     port {
-      port        = 80
+      port        = var.service_port
       target_port = 8000
     }
 

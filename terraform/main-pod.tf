@@ -7,7 +7,7 @@ resource "kubernetes_pod" "hello-pod" {
   spec {
     share_process_namespace = true
     container {
-      image = "docker.io/hammingweight/hello_server:1.0.0"
+      image = "docker.io/hammingweight/hello_server:${var.app_version}"
       name  = "hello-server"
 
       port {
@@ -15,7 +15,7 @@ resource "kubernetes_pod" "hello-pod" {
       }
     }
     container {
-      image = "docker.io/hammingweight/fim:1.0.0"
+      image = "docker.io/hammingweight/fim:${var.fim_version}"
       name  = "fim"
       security_context {
         capabilities {
