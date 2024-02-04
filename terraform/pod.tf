@@ -23,6 +23,11 @@ resource "kubernetes_pod" "hello-pod" {
           add  = ["DAC_READ_SEARCH", "KILL", "SYS_PTRACE"]
         }
       }
+      liveness_probe {
+        exec {
+          command = ["/bin/ash", "/healthz", "/home/hellouser/index.html", "746308829575e17c3331bbcb00c0898b"]
+        }
+      }
     }
   }
 }
