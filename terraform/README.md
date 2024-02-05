@@ -5,7 +5,7 @@ If you'd prefer to install the FIM demo against a real Kubernetes cluster, you c
 $ terraform apply
 ```
 
-or, if you don't want to use your default kubernetes context
+or, if you don't want to use your default Kubernetes context
 
 ```
 $ terraform apply --var kube_config_context=minikube
