@@ -1,6 +1,6 @@
 resource "kubernetes_service" "hello" {
   metadata {
-    name      = var.app_name
+    name      = "${var.app_name}-service"
     namespace = var.namespace
   }
   spec {
