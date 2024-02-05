@@ -4,7 +4,7 @@ script_dir="$( cd -- "$( dirname -- "${BASH_SOURCE[0]:-$0}"; )" &> /dev/null && 
 
 minikube start
 
-eval $(minikube docker-env)
+eval $(minikube -p minikube docker-env)
 docker build -t hammingweight/hello_server:1.0.0 $script_dir/containers/hello_server
 docker build -t hammingweight/fim:1.0.0 $script_dir/containers/fim
 
