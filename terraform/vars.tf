@@ -15,3 +15,9 @@ variable "service_port" {
   type        = number
   default     = 80
 }
+
+variable "namespace" {
+  description = "The namespace of the application."
+  type        = string
+  default     = "default"
+}

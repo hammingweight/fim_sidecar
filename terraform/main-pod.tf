@@ -1,7 +1,8 @@
 resource "kubernetes_pod" "hello-pod" {
   metadata {
-    name   = "hello"
-    labels = local.pod_labels
+    name      = "hello"
+    namespace = var.namespace
+    labels    = local.pod_labels
   }
 
   spec {

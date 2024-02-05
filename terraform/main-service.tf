@@ -1,6 +1,7 @@
 resource "kubernetes_service" "hello" {
   metadata {
-    name = "hello"
+    name      = "hello"
+    namespace = var.namespace
   }
   spec {
     selector = local.pod_labels
