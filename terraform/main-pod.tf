@@ -11,7 +11,7 @@ resource "kubernetes_pod" "hello-pod" {
     # The container that runs the 'hello, world' application
     container {
       image = "docker.io/hammingweight/hello_server:${var.app_version}"
-      name  = "${var.app_name}-server"
+      name  = "hello-server"
 
       port {
         container_port = 8000
