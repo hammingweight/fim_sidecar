@@ -27,3 +27,15 @@ variable "namespace" {
   type        = string
   default     = "default"
 }
+
+variable "kube_config_path" {
+  description = "The path to the kube config file."
+  type        = string
+  default     = "~/.kube/config"
+}
+
+variable "kube_config_context" {
+  description = "The context to use from the kube config file."
+  type        = string
+  default     = null
+}
