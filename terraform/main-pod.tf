@@ -1,6 +1,6 @@
 resource "kubernetes_pod" "hello-pod" {
   metadata {
-    name      = var.app_name
+    name      = "${var.app_name}-server"
     namespace = var.namespace
     labels    = local.pod_labels
   }
