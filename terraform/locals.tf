@@ -1,7 +1,7 @@
 locals {
   pod_labels = {
-    "app.kubernetes.io/name" : "hello"
-    "app.kubernetes.io/instance" : "hello"
-    "app.kubernetes.io/version" : "1.0.0"
+    "app.kubernetes.io/name" : var.app_name
+    "app.kubernetes.io/instance" : var.app_name
+    "app.kubernetes.io/version" : var.app_version
   }
 }

@@ -1,6 +1,6 @@
 resource "kubernetes_pod" "hello-pod" {
   metadata {
-    name      = "hello"
+    name      = var.app_name
     namespace = var.namespace
     labels    = local.pod_labels
   }
@@ -9,7 +9,7 @@ resource "kubernetes_pod" "hello-pod" {
     share_process_namespace = true
     container {
       image = "docker.io/hammingweight/hello_server:${var.app_version}"
-      name  = "hello-server"
+      name  = "${var.app_name}-server"
 
       port {
         container_port = 8000
