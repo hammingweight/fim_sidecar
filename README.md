@@ -32,7 +32,8 @@ Ideally, you'll need locally installed versions of
  * Docker
  * Minikube
 
-If you don't have Docker or Minikube installed, you can use `Helm` to deploy the application in a cluster as described in the [`helm`](./helm/README.md) directory.
+If you don't have Docker or Minikube installed, you can use `Helm` or `terraform` to deploy the application to a kubernetes cluster as described in the [`helm`](./helm/README.md)
+and [`terraform`](./terraform/README.md) directories.
 
 ### Building and running the application
 If you have Docker and Minikube installed, you can build and run the application by executing
