@@ -5,11 +5,17 @@ If you'd prefer to install the FIM demo against a real Kubernetes cluster, you c
 $ terraform apply
 ```
 
+or, if you don't want to use your default kubernetes configuration
+
+```
+$ terraform apply --var kube_config_context=minikube
+```
+
 or, if you want to install the demo in the `foobar` namespace
 
 ```
 $ kubectl create namespace foobar
-$ terraform apply --var namespace-foobar
+$ terraform apply --var namespace=foobar
 ```
 
 The terraform output will provide the "Hello, world" service endpoint.
