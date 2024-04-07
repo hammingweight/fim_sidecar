@@ -15,5 +15,11 @@ can view all files in the `hello_server` container which is necessary to check t
 
 The `fim` container has a [`livenessProbe`](https://github.com/hammingweight/fim_sidecar/blob/1acc0a8bb9f62c8f3dd06c80b3d9defaf931588b/k8s_manifests/hello_server_pod.yaml#L34) that checks the integrity of the `index.html` file.
 
+### Why not use a Deployment?
+Using a Pod manifest is not best practice; it is better to deploy a Deployment rather than to deploy a Pod directly. It's more instructive though to use a pod here since:
+ * The manifest is shorter and,
+ * It's easier to use `kubectl exec <pod_name>` since the pod name is fixed ("hello-server") if we use a Pod manifest while the pod name would be random if we used a Deployment.
+
+
 ## `hello_load_balancer_service`
 The `hello_load_balancer_service` service is a simple Load Balancer service that routes requests on port 80 to port 8000 of the `hello_server` container.
