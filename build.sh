@@ -2,7 +2,7 @@
 set -e
 script_dir="$( cd -- "$( dirname -- "${BASH_SOURCE[0]:-$0}"; )" &> /dev/null && pwd 2> /dev/null; )"
 
-minikube start
+minikube start -n=3
 
 HELLO_IMAGE_NAME=hammingweight/hello_server:1.0.0
 docker build -t $HELLO_IMAGE_NAME $script_dir/containers/hello_server

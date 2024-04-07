@@ -4,7 +4,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hello-server-deployment
+  name: hello-server
   labels:
     app.kubernetes.io/name: hello
   annotations:
@@ -23,7 +23,6 @@ spec:
       labels:
         app.kubernetes.io/name: hello
     spec:
-      name: hello-server
       shareProcessNamespace: true
       containers:
         # The "Hello, world" application container
