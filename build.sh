@@ -7,10 +7,12 @@ minikube start
 HELLO_IMAGE_NAME=hammingweight/hello_server:1.0.0
 docker build -t $HELLO_IMAGE_NAME $script_dir/containers/hello_server
 minikube image load $HELLO_IMAGE_NAME
+docker rmi $HELLO_IMAGE_NAME
 
 FIM_IMAGE_NAME=hammingweight/fim:1.0.0
 docker build -t $FIM_IMAGE_NAME $script_dir/containers/fim
 minikube image load $FIM_IMAGE_NAME
+docker rmi $FIM_IMAGE_NAME
 
 kubectl apply -f $script_dir/k8s_manifests/hello_server_pod.yaml
 kubectl apply -f $script_dir/k8s_manifests/hello_load_balancer_service.yaml
