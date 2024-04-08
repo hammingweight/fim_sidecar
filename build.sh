@@ -9,6 +9,7 @@ else
     microk8s start
     cp $HOME/.kube/config $HOME/.kube/config.bak || true
     microk8s config > $HOME/.kube/config
+    # We'll need a load balancer.
     microk8s enable metallb:10.64.140.43-10.64.140.49
 fi
 

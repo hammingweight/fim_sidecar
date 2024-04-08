@@ -30,9 +30,9 @@ controlplane to start a new instance of the container. The pod's service is expo
 ### Prerequisites
 Ideally, you'll need locally installed versions of
  * Docker
- * Minikube
+ * Minikube (or MicroK8 with the MetalLB load balancer)
 
-If you don't have Docker or Minikube installed, you can use `Helm` or `Terraform` to deploy the application to a Kubernetes cluster as described in the [`helm`](./helm/README.md)
+If you don't have Docker or Minikube/MicroK8s installed, you can use `Helm` or `Terraform` to deploy the application to a Kubernetes cluster as described in the [`helm`](./helm/README.md)
 and [`terraform`](./terraform/README.md) directories.
 
 ### Building and running the application
@@ -42,7 +42,12 @@ If you have Docker and Minikube installed, you can build and run the application
 $ ./build.sh
 ```
 
-The build script starts up minikube, builds the container images for the application and sidecar, creates a pod with the two containers and creates a Kubernetes
+or, for MicroK8s,
+```
+$ USE_MICROK8S=1 ./build.sh
+```
+
+The build script starts up Minikube/MicroK8s, builds the container images for the application and sidecar, creates a pod with the two containers and creates a Kubernetes
 load balancer service to make the application accessible. If the build script completes successfully, you should be able to see the pod as running and that
 the pod contains two containers.
 
@@ -52,7 +57,7 @@ NAME           READY   STATUS    RESTARTS   AGE
 hello-server   2/2     Running   0          10s
 ```
 
-Create a tunnel to minikube
+If you're using Minikube, create a tunnel
 
 ```
 $ minikube tunnel
