@@ -1,4 +1,4 @@
-FROM python:3.8
+FROM python:3.12
 RUN useradd -m hellouser
 WORKDIR /home/hellouser
 COPY index.html /home/hellouser

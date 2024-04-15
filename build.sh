@@ -13,7 +13,7 @@ else
     microk8s enable metallb:10.64.140.43-10.64.140.49
 fi
 
-HELLO_IMAGE_NAME=hammingweight/hello_server:1.0.0
+HELLO_IMAGE_NAME=hammingweight/hello_server:1.0.1
 docker build -t $HELLO_IMAGE_NAME $script_dir/containers/hello_server
 if [ -z ${USE_MICROK8S} ]
 then

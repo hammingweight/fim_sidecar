@@ -17,7 +17,7 @@ spec:
   shareProcessNamespace: true
   containers:
     # The "Hello, world" application container
-    - image: docker.io/hammingweight/hello_server:1.0.0
+    - image: docker.io/hammingweight/hello_server:1.0.1
       name: hello-server
       ports:
         - containerPort: 8000

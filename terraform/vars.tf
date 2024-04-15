@@ -7,7 +7,7 @@ variable "app_name" {
 variable "app_version" {
   description = "The version of the application."
   type        = string
-  default     = "1.0.0"
+  default     = "1.0.1"
 }
 
 variable "fim_version" {
