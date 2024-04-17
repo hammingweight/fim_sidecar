@@ -14,16 +14,18 @@ then
     minikube image load $HELLO_IMAGE_NAME
     minikube image load $FIM_IMAGE_NAME
 else
+    docker save -o hello-server.tar $HELLO_IMAGE_NAME
+    docker save -o fim.tar $FIM_IMAGE_NAME
+
     microk8s start
     cp $HOME/.kube/config $HOME/.kube/config.bak || true
     microk8s config > $HOME/.kube/config
     # We'll need a load balancer.
     microk8s enable metallb:10.64.140.43-10.64.140.49
-    docker save -o hello-server.tar $HELLO_IMAGE_NAME
     microk8s images import hello-server.tar
-    rm hello-server.tar
-    docker save -o fim.tar $FIM_IMAGE_NAME
     microk8s images import fim.tar
+
+    rm hello-server.tar
     rm fim.tar
 fi
 
