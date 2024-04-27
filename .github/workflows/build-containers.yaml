@@ -21,7 +21,7 @@ jobs:
       - name: Build and push hello-server
         uses: docker/build-push-action@v5
         with:
-          context: containers/hello-server
+          context: containers/hello_server
           platforms: linux/amd64,linux/arm64
           push: true
           tags: hammingweight/hello-server:1.0.2
