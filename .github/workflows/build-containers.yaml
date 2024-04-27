@@ -24,7 +24,7 @@ jobs:
           context: containers/hello_server
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: hammingweight/hello-server:1.0.2
+          tags: hammingweight/hello_server:1.0.2
       - name: Build and push FIM sidecar
         uses: docker/build-push-action@v5
         with:
