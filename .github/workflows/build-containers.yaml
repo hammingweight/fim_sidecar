@@ -1,0 +1,14 @@
+name: build-containers
+on:
+  workflow_dispatch
+
+jobs:
+  build-job:
+    name: Build Job
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Start build job'
+        run: |
+          echo "Starting the build job."
+      - name: 'Checkout'
+        uses: actions/checkout@v4
