@@ -2,10 +2,10 @@
 set -e
 script_dir="$( cd -- "$( dirname -- "${BASH_SOURCE[0]:-$0}"; )" &> /dev/null && pwd 2> /dev/null; )"
 
-HELLO_IMAGE_NAME=hammingweight/hello_server:1.0.1
+HELLO_IMAGE_NAME=hammingweight/hello_server:1.0.2
 docker build -t $HELLO_IMAGE_NAME $script_dir/containers/hello_server
 
-FIM_IMAGE_NAME=hammingweight/fim:1.0.0
+FIM_IMAGE_NAME=hammingweight/fim:1.0.1
 docker build -t $FIM_IMAGE_NAME $script_dir/containers/fim
 
 if [ -z ${USE_MICROK8S} ]
