@@ -9,4 +9,4 @@ service:
   type: LoadBalancer
   port: 80
 
-fimVersion: 1.0.0
+fimVersion: 1.0.1
