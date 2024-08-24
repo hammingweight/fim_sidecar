@@ -34,5 +34,4 @@ fi
 docker rmi $HELLO_IMAGE_NAME
 docker rmi $FIM_IMAGE_NAME
 
-kubectl create -f $script_dir/k8s_manifests/hello_server_pod.yaml
-kubectl create -f $script_dir/k8s_manifests/hello_load_balancer_service.yaml
+kubectl apply -f $script_dir/k8s_manifests/
