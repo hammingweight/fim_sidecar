@@ -6,4 +6,7 @@ locals {
     "app.kubernetes.io/instance" : var.app_name
     "app.kubernetes.io/version" : var.app_version
   }
+  service_labels = {
+    "app.kubernetes.io/name" : var.app_name
+  }
 }

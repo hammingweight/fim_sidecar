@@ -5,8 +5,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: {{ include "hello-server.podName" . }}
-  labels:
-    {{ include "hello-server.selectorLabels" . | nindent 4 }}
+  labels: {{ include "hello-server.selectorLabels" . | nindent 4 }}
   annotations:
     # This annotation isn't actually used. It
     # would be nice if we had a dynamic admission
